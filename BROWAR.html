@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#203e35">
+  <title>BROWAR — Odkryj swój styl piwa</title>
+  <style>
+    /* Kolory i wspólne ustawienia. */
+    :root {
+      color-scheme: light;
+      --paper: #f6f4ee;
+      --ink: #203e35;
+      --muted: #626b62;
+      --line: #dcded4;
+      --gold: #b79658;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; }
+    .page { width: min(1120px, calc(100% - 96px)); margin: 0 auto; }
+
+    /* Nagłówek i wprowadzenie. */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { width: 34px; height: 42px; color: var(--gold); flex-shrink: 0; }
+    .brand-name { font: 700 27px var(--serif); letter-spacing: 3px; }
+    .header-note { margin: 0; color: var(--muted); font-size: 12px; letter-spacing: .04em; }
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 72px;
+      min-height: calc(100svh - 195px);
+      padding: 64px 0;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 24px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--gold); }
+    h1 { margin: 0; font: 400 clamp(42px, 4.8vw, 62px)/1.1 var(--serif); letter-spacing: -2px; }
+    h1 em { color: #65775a; font-weight: 400; }
+    .intro-copy { max-width: 340px; margin: 26px 0 0; color: var(--muted); font-size: 15px; line-height: 1.85; }
+    .intro-detail {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 34px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .intro-detail span { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+    /* Wspólna karta pytań i rekomendacji. */
+    .card {
+      position: relative;
+      padding: 36px;
+      border: 1px solid #2c4b40;
+      border-radius: 22px;
+      background: var(--ink);
+      color: var(--paper);
+      box-shadow: 0 22px 48px -28px #203e3560;
+    }
+    .card-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 36px; }
+    .card-label { margin: 0; color: #d6c49c; font-size: 10px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; }
+    .card-mark { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid #ffffff28; border-radius: 50%; color: #d6c49c; }
+    .card-mark svg { width: 17px; height: 17px; }
+    .step { margin: 0 0 14px; color: #bfcabf; font-size: 12px; }
+    h2 { margin: 0; font: 400 32px/1.3 var(--serif); letter-spacing: -.5px; overflow-wrap: anywhere; }
+    h2:focus { outline: none; }
+    .question { min-height: 126px; }
+    .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 54px;
+      padding: 15px 20px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      transition: background .15s, border-color .15s;
+    }
+    .button svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .primary { background: #eee8d8; color: var(--ink); }
+    .primary:hover { background: #fffaf0; }
+    .secondary { border-color: #81958a; background: transparent; color: var(--paper); }
+    .secondary:hover { background: #ffffff0d; border-color: #c3cec4; }
+    .button:focus-visible { outline: 3px solid #e0bc72; outline-offset: 4px; }
+    .card-hint { margin: 24px 0 0; padding-top: 22px; border-top: 1px solid #ffffff20; color: #becabe; font-size: 12px; line-height: 1.7; }
+    .description { margin: 20px 0 28px; color: #d6dfd3; font-size: 14px; line-height: 1.85; }
+    .restart { width: 100%; }
+    .footer { padding: 24px 0 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; line-height: 1.7; }
+    .footer p { margin: 0; }
+
+    @media (max-width: 900px) {
+      .page { width: min(720px, calc(100% - 48px)); }
+      main { gap: 36px; }
+      .card { padding: 28px; }
+      h2 { font-size: 28px; }
+    }
+    @media (max-width: 640px) {
+      .page { width: calc(100% - 40px); }
+      .header { padding: 22px 0; gap: 16px; }
+      .brand-name { font-size: 23px; }
+      .brand-icon { width: 27px; height: 34px; }
+      .header-note { max-width: 105px; text-align: right; font-size: 11px; line-height: 1.6; }
+      main { grid-template-columns: 1fr; min-height: auto; gap: 32px; padding: 38px 0; }
+      h1 { font-size: clamp(38px, 9.5vw, 52px); letter-spacing: -1.5px; }
+      .eyebrow { margin-bottom: 18px; font-size: 10px; }
+      .intro-copy { margin-top: 18px; max-width: 390px; font-size: 14px; }
+      .intro-detail { margin-top: 20px; }
+      .card { padding: 26px; border-radius: 18px; }
+      .card-header { margin-bottom: 28px; }
+      .question { min-height: 108px; }
+      .answers { margin-top: 20px; }
+      .footer { padding-top: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand" aria-label="BROWAR">
+        <svg class="brand-icon" viewBox="0 0 34 42" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <path d="M17 39V8M17 31C8 31 4 26 4 20c8 0 13 4 13 11Zm0 0c9 0 13-5 13-11-8 0-13 4-13 11ZM17 21C9 21 6 16 6 11c7 0 11 4 11 10Zm0 0c8 0 11-5 11-10-7 0-11 4-11 10ZM17 12c-5-3-5-7 0-11 5 4 5 8 0 11Z"/>
+        </svg>
+        <span class="brand-name" aria-hidden="true">BROWAR</span>
+      </div>
+      <p class="header-note">Twój przewodnik po smakach</p>
+    </header>
+
+    <main>
+      <div class="intro">
+        <p class="eyebrow">Odkryj swój styl</p>
+        <h1>Dobry smak<br>zaczyna się<br><em>od Ciebie.</em></h1>
+        <p class="intro-copy">Kilka prostych pytań. Styl piwa dopasowany do Twoich upodobań. Poznaj naszą rekomendację.</p>
+        <p class="intro-detail"><span aria-hidden="true"></span>Twoje odpowiedzi, Twój wybór.</p>
+      </div>
+
+      <div class="card" aria-live="polite" aria-atomic="true">
+        <section id="quiz" aria-labelledby="question">
+          <div class="card-header">
+            <p class="card-label">Poznajmy Twój smak</p>
+            <span class="card-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 19C3 10 8 4 20 4c0 12-6 17-15 15ZM5 19 15 9"/></svg>
+            </span>
+          </div>
+          <p id="step" class="step">Pytanie 01</p>
+          <h2 id="question" class="question" tabindex="-1">Czy wolisz piwo bezalkoholowe?</h2>
+          <div class="answers">
+            <button id="yes" class="button primary" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+              Tak
+            </button>
+            <button id="no" class="button secondary" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+              Nie
+            </button>
+          </div>
+          <p class="card-hint">Wybierz odpowiedź, która najlepiej pasuje do Ciebie.</p>
+        </section>
+
+        <section id="result" aria-labelledby="beer" hidden>
+          <div class="card-header">
+            <p class="card-label">Twój styl piwa</p>
+            <span class="card-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
+            </span>
+          </div>
+          <p class="step">Nasza rekomendacja</p>
+          <h2 id="beer" tabindex="-1"></h2>
+          <p id="description" class="description"></p>
+          <button id="restart" class="button primary restart" type="button">Spróbuj ponownie <span aria-hidden="true">↗</span></button>
+          <p class="card-hint">Dopasowane do Twoich odpowiedzi.</p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>BROWAR · Baza Rekomendacji Oparta o Wybory, Analizę i Reguły</p>
+    </footer>
+  </div>
+
+  <script>
+    // Odpowiedź prowadzi do kolejnego pytania albo do rekomendacji.
+    const tree = {
+      start: { question: "Czy wolisz piwo bezalkoholowe?", yes: "zero", no: "dark" },
+      zero: { question: "Czy lubisz owocowe smaki?", yes: "nonalcFruit", no: "nonalcLager" },
+      dark: { question: "Czy lubisz ciemne piwo?", yes: "roasted", no: "bitter" },
+      roasted: { question: "Czy lubisz mocno palone, kawowe nuty?", yes: "stout", no: "porter" },
+      bitter: { question: "Czy lubisz wyraźną goryczkę?", yes: "citrus", no: "wheat" },
+      citrus: { question: "Czy lubisz cytrusowe i intensywnie chmielowe aromaty?", yes: "ipa", no: "pils" },
+      wheat: { question: "Czy lubisz delikatne nuty bananowe i goździkowe?", yes: "weizen", no: "lager" }
+    };
+
+    const beers = {
+      nonalcFruit: { name: "Piwo bezalkoholowe owocowe ", description: "Lubisz owocowe smaki i wybierasz wersję bez alkoholu. Postaw na owocową odmianę 0,0%." },
+      nonalcLager: { name: "Lager bezalkoholowy ", description: "Klasyczny, lekki profil bez alkoholu. Dobry wybór, gdy nie szukasz owocowych dodatków." },
+      stout: { name: "Stout ", description: "Ciemne piwo z wyraźnymi nutami kawy i palonego słodu. System wykrył miłośnika konkretnych smaków!" },
+      porter: { name: "Porter ", description: "Ciemny, słodowy styl. Warto spróbować, jeśli cenisz ciemne piwa, ale niekoniecznie mocno kawowe." },
+      ipa: { name: "IPA ", description: "Wyrazista goryczka i intensywny aromat chmielu. BROWAR zatwierdza chmielowy wybór!" },
+      pils: { name: "Pils ", description: "Wyraźna, czysta goryczka bez dominujących cytrusowych aromatów. Klasyka ma sens!" },
+      weizen: { name: "Piwo pszeniczne (Weizen) ", description: "Łagodniejsze piwo z charakterystycznymi nutami bananów i goździków." },
+      lager: { name: "Jasny lager ", description: "Łagodny i prosty w odbiorze styl. Bez skomplikowanych eksperymentów — klasyka!" }
+    };
+
+    // Elementy strony pobieramy tylko raz.
+    const quiz = document.getElementById("quiz");
+    const result = document.getElementById("result");
+    const question = document.getElementById("question");
+    const step = document.getElementById("step");
+    const beer = document.getElementById("beer");
+    const description = document.getElementById("description");
+
+    let current = "start";
+    let questionNumber = 1;
+
+    function show(moveFocus = false) {
+      const isQuestion = Boolean(tree[current]);
+      quiz.hidden = !isQuestion;
+      result.hidden = isQuestion;
+
+      if (isQuestion) {
+        question.textContent = tree[current].question;
+        step.textContent = "Pytanie " + String(questionNumber).padStart(2, "0");
+      } else {
+        beer.textContent = beers[current].name;
+        description.textContent = beers[current].description;
+      }
+
+      if (moveFocus) (isQuestion ? question : beer).focus();
+    }
+
+    function answer(isYes) {
+      current = tree[current][isYes ? "yes" : "no"];
+      questionNumber += 1;
+      show(true);
+    }
+
+    function restart() {
+      current = "start";
+      questionNumber = 1;
+      show(true);
+    }
+
+    document.getElementById("yes").addEventListener("click", () => answer(true));
+    document.getElementById("no").addEventListener("click", () => answer(false));
+    document.getElementById("restart").addEventListener("click", restart);
+    show();
+  </script>
+</body>
+</html>
