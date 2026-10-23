@@ -116,6 +116,22 @@
     .button:focus-visible { outline: 3px solid #e0bc72; outline-offset: 4px; }
     .card-hint { margin: 24px 0 0; padding-top: 22px; border-top: 1px solid #ffffff20; color: #becabe; font-size: 12px; line-height: 1.7; }
     .description { margin: 20px 0 28px; color: #d6dfd3; font-size: 14px; line-height: 1.85; }
+    /* Każde zdjęcie ma tę samą ramkę; contain zachowuje całe piwo w kadrze. */
+    .beer-photo {
+      display: grid;
+      place-items: center;
+      height: 240px;
+      margin: 24px 0 0;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid #e8e9e3;
+      border-radius: 14px;
+      background: #fff;
+    }
+    .beer-photo img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+    .photo-placeholder { display: grid; justify-items: center; gap: 14px; color: #737c70; }
+    .photo-placeholder svg { width: 44px; height: 72px; color: var(--gold); }
+    .photo-placeholder p { margin: 0; font-size: 12px; }
     .restart { width: 100%; }
     .footer { padding: 24px 0 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; line-height: 1.7; }
     .footer p { margin: 0; }
@@ -200,8 +216,22 @@
           </div>
           <p class="step">Nasza rekomendacja</p>
           <h2 id="beer" tabindex="-1"></h2>
+          <div class="beer-photo">
+            <img id="beer-image" alt="" width="480" height="240" hidden>
+            <div id="photo-placeholder" class="photo-placeholder">
+              <svg viewBox="0 0 44 72" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+                <path d="M17 4h10v20c0 5 8 9 8 17v24a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3V41c0-8 8-12 8-17V4Z"/>
+                <path d="M16 4h12M17 10h10M9 43h26M9 58h26"/>
+                <path d="M22 47v7m-3-5 3 2 3-2"/>
+              </svg>
+              <p>Zdjęcie wybranego piwa</p>
+            </div>
+          </div>
           <p id="description" class="description"></p>
-          <button id="restart" class="button primary restart" type="button">Spróbuj ponownie <span aria-hidden="true">↗</span></button>
+          <button id="restart" class="button primary restart" type="button">
+            Spróbuj ponownie
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7v5h-5M19 12a7 7 0 1 0-2 5"/></svg>
+          </button>
           <p class="card-hint">Dopasowane do Twoich odpowiedzi.</p>
         </section>
       </div>
@@ -224,15 +254,48 @@
       wheat: { question: "Czy lubisz delikatne nuty bananowe i goździkowe?", yes: "weizen", no: "lager" }
     };
 
+    // Zdjęcia PNG umieść w tym samym folderze co BROWAR.html.
     const beers = {
-      nonalcFruit: { name: "Piwo bezalkoholowe owocowe ", description: "Lubisz owocowe smaki i wybierasz wersję bez alkoholu. Postaw na owocową odmianę 0,0%." },
-      nonalcLager: { name: "Lager bezalkoholowy ", description: "Klasyczny, lekki profil bez alkoholu. Dobry wybór, gdy nie szukasz owocowych dodatków." },
-      stout: { name: "Stout ", description: "Ciemne piwo z wyraźnymi nutami kawy i palonego słodu. System wykrył miłośnika konkretnych smaków!" },
-      porter: { name: "Porter ", description: "Ciemny, słodowy styl. Warto spróbować, jeśli cenisz ciemne piwa, ale niekoniecznie mocno kawowe." },
-      ipa: { name: "IPA ", description: "Wyrazista goryczka i intensywny aromat chmielu. BROWAR zatwierdza chmielowy wybór!" },
-      pils: { name: "Pils ", description: "Wyraźna, czysta goryczka bez dominujących cytrusowych aromatów. Klasyka ma sens!" },
-      weizen: { name: "Piwo pszeniczne (Weizen) ", description: "Łagodniejsze piwo z charakterystycznymi nutami bananów i goździków." },
-      lager: { name: "Jasny lager ", description: "Łagodny i prosty w odbiorze styl. Bez skomplikowanych eksperymentów — klasyka!" }
+      nonalcFruit: {
+        name: "Piwo bezalkoholowe owocowe ",
+        description: "Lubisz owocowe smaki i wybierasz wersję bez alkoholu. Postaw na owocową odmianę 0,0%.",
+        image: "bezalkoholowe-owocowe.png"
+      },
+      nonalcLager: {
+        name: "Lager bezalkoholowy ",
+        description: "Klasyczny, lekki profil bez alkoholu. Dobry wybór, gdy nie szukasz owocowych dodatków.",
+        image: "lager-bezalkoholowy.png"
+      },
+      stout: {
+        name: "Stout ",
+        description: "Ciemne piwo z wyraźnymi nutami kawy i palonego słodu. System wykrył miłośnika konkretnych smaków!",
+        image: "stout.png"
+      },
+      porter: {
+        name: "Porter ",
+        description: "Ciemny, słodowy styl. Warto spróbować, jeśli cenisz ciemne piwa, ale niekoniecznie mocno kawowe.",
+        image: "porter.png"
+      },
+      ipa: {
+        name: "IPA ",
+        description: "Wyrazista goryczka i intensywny aromat chmielu. BROWAR zatwierdza chmielowy wybór!",
+        image: "ipa.png"
+      },
+      pils: {
+        name: "Pils ",
+        description: "Wyraźna, czysta goryczka bez dominujących cytrusowych aromatów. Klasyka ma sens!",
+        image: "pils.png"
+      },
+      weizen: {
+        name: "Piwo pszeniczne (Weizen) ",
+        description: "Łagodniejsze piwo z charakterystycznymi nutami bananów i goździków.",
+        image: "weizen.png"
+      },
+      lager: {
+        name: "Jasny lager ",
+        description: "Łagodny i prosty w odbiorze styl. Bez skomplikowanych eksperymentów — klasyka!",
+        image: "lager.png"
+      }
     };
 
     // Elementy strony pobieramy tylko raz.
@@ -242,6 +305,18 @@
     const step = document.getElementById("step");
     const beer = document.getElementById("beer");
     const description = document.getElementById("description");
+    const beerImage = document.getElementById("beer-image");
+    const photoPlaceholder = document.getElementById("photo-placeholder");
+
+    // Gdy zdjęcia jeszcze nie ma, zostaje schludna ramka z ikoną.
+    beerImage.addEventListener("load", () => {
+      beerImage.hidden = false;
+      photoPlaceholder.hidden = true;
+    });
+    beerImage.addEventListener("error", () => {
+      beerImage.hidden = true;
+      photoPlaceholder.hidden = false;
+    });
 
     let current = "start";
     let questionNumber = 1;
@@ -257,6 +332,10 @@
       } else {
         beer.textContent = beers[current].name;
         description.textContent = beers[current].description;
+        beerImage.hidden = true;
+        photoPlaceholder.hidden = false;
+        beerImage.alt = "Zdjęcie piwa: " + beers[current].name.trim();
+        beerImage.src = beers[current].image;
       }
 
       if (moveFocus) (isQuestion ? question : beer).focus();
